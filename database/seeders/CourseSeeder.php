@@ -14,14 +14,16 @@ class CourseSeeder extends Seeder
     public function run(): void
     {
         // Create Forex Trading Course
-        $forexCourse = Course::create([
-            'title' => 'Forex Trading Mastery',
-            'slug' => 'forex-trading-mastery',
-            'price' => 299.00,
-            'description' => 'Learn the fundamentals of Forex trading, technical analysis, and risk management. This comprehensive course covers everything from basic concepts to advanced strategies.',
-            'image' => null,
-            'is_published' => true,
-        ]);
+        $forexCourse = Course::firstOrCreate(
+            ['slug' => 'forex-trading-mastery'],
+            [
+                'title' => 'Forex Trading Mastery',
+                'price' => 299.00,
+                'description' => 'Learn the fundamentals of Forex trading, technical analysis, and risk management. This comprehensive course covers everything from basic concepts to advanced strategies.',
+                'image' => null,
+                'is_published' => true,
+            ]
+        );
 
         // Create lessons for Forex course
         $forexLessons = [
@@ -60,18 +62,23 @@ class CourseSeeder extends Seeder
         ];
 
         foreach ($forexLessons as $lesson) {
-            $forexCourse->lessons()->create($lesson);
+            $forexCourse->lessons()->firstOrCreate(
+                ['title' => $lesson['title']],
+                $lesson
+            );
         }
 
         // Create Volatility Trading Course
-        $volatilityCourse = Course::create([
-            'title' => 'Volatility Trading Strategies',
-            'slug' => 'volatility-trading-strategies',
-            'price' => 199.00,
-            'description' => 'Master the art of trading volatility. Learn how to profit from market volatility using options and other derivative instruments.',
-            'image' => null,
-            'is_published' => true,
-        ]);
+        $volatilityCourse = Course::firstOrCreate(
+            ['slug' => 'volatility-trading-strategies'],
+            [
+                'title' => 'Volatility Trading Strategies',
+                'price' => 199.00,
+                'description' => 'Master the art of trading volatility. Learn how to profit from market volatility using options and other derivative instruments.',
+                'image' => null,
+                'is_published' => true,
+            ]
+        );
 
         // Create lessons for Volatility course
         $volatilityLessons = [
@@ -102,18 +109,23 @@ class CourseSeeder extends Seeder
         ];
 
         foreach ($volatilityLessons as $lesson) {
-            $volatilityCourse->lessons()->create($lesson);
+            $volatilityCourse->lessons()->firstOrCreate(
+                ['title' => $lesson['title']],
+                $lesson
+            );
         }
 
         // Create Advanced Trading Course
-        $advancedCourse = Course::create([
-            'title' => 'Advanced Trading Techniques',
-            'slug' => 'advanced-trading-techniques',
-            'price' => 399.00,
-            'description' => 'Take your trading to the next level with advanced techniques, algorithmic trading, and portfolio management.',
-            'image' => null,
-            'is_published' => true,
-        ]);
+        $advancedCourse = Course::firstOrCreate(
+            ['slug' => 'advanced-trading-techniques'],
+            [
+                'title' => 'Advanced Trading Techniques',
+                'price' => 399.00,
+                'description' => 'Take your trading to the next level with advanced techniques, algorithmic trading, and portfolio management.',
+                'image' => null,
+                'is_published' => true,
+            ]
+        );
 
         // Create lessons for Advanced course
         $advancedLessons = [
@@ -144,7 +156,10 @@ class CourseSeeder extends Seeder
         ];
 
         foreach ($advancedLessons as $lesson) {
-            $advancedCourse->lessons()->create($lesson);
+            $advancedCourse->lessons()->firstOrCreate(
+                ['title' => $lesson['title']],
+                $lesson
+            );
         }
     }
 }

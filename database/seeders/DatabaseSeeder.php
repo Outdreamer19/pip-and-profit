@@ -19,21 +19,25 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Create admin user
-        $adminUser = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@pipandprofit.com',
-            'password' => bcrypt('password'),
-            'role' => 'admin',
-        ]);
+        $adminUser = User::firstOrCreate(
+            ['email' => 'admin@pipandprofit.com'],
+            [
+                'name' => 'Admin User',
+                'password' => bcrypt('password'),
+                'role' => 'admin',
+            ]
+        );
         $adminUser->assignRole('admin');
 
         // Create regular user
-        $regularUser = User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-            'role' => 'user',
-        ]);
+        $regularUser = User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => bcrypt('password'),
+                'role' => 'user',
+            ]
+        );
         $regularUser->assignRole('user');
 
         // Seed courses and lessons
