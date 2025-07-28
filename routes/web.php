@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PricingController;
+use App\Http\Controllers\VideoUploadController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -46,6 +47,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    
+    // Admin lesson management routes
+    Route::get('/lessons/{lesson}/edit', [LessonController::class, 'edit'])->name('lessons.edit');
+    Route::put('/lessons/{lesson}', [LessonController::class, 'update'])->name('lessons.update');
+    
+    // Video upload routes
+    Route::post('/lessons/{lesson}/upload-video', [VideoUploadController::class, 'upload'])->name('lessons.upload-video');
+    Route::post('/lessons/{lesson}/upload-thumbnail', [VideoUploadController::class, 'uploadThumbnail'])->name('lessons.upload-thumbnail');
+    Route::delete('/lessons/{lesson}/delete-video', [VideoUploadController::class, 'deleteVideo'])->name('lessons.delete-video');
+    Route::delete('/lessons/{lesson}/delete-thumbnail', [VideoUploadController::class, 'deleteThumbnail'])->name('lessons.delete-thumbnail');
 });
 
 require __DIR__.'/settings.php';

@@ -14,7 +14,6 @@ class LessonController extends Controller
     {
         // Check if user has access to this course
         $user = Auth::user();
-        
         if (!$user) {
             return redirect()->route('login');
         }
@@ -36,5 +35,38 @@ class LessonController extends Controller
             'lesson' => $lesson,
             'course' => $course,
         ]);
+    }
+
+    public function edit(Lesson $lesson)
+    {
+        // Check if user is admin
+        if (!Auth::user() || !Auth::user()->isAdmin()) {
+            abort(403);
+        }
+
+        return Inertia::render('Admin/Lessons/Edit', [
+            'lesson' => $lesson,
+        ]);
+    }
+
+    public function update(Request $request, Lesson $lesson)
+    {
+        // Check if user is admin
+        if (!Auth::user() || !Auth::user()->isAdmin()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'video_url' => 'nullable|url',
+            'order' => 'required|integer|min:1',
+            'is_free' => 'boolean',
+        ]);
+
+        $lesson->update($validated);
+
+        return redirect()->route('admin.courses.edit', $lesson->course_id)
+            ->with('success', 'Lesson updated successfully.');
     }
 }

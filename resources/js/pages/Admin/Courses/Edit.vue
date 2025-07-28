@@ -109,12 +109,12 @@
                     >
                       Free
                     </span>
-                    <button
-                      type="button"
+                    <Link
+                      :href="route('admin.lessons.edit', lesson.id)"
                       class="text-indigo-600 hover:text-indigo-900 p-1"
                     >
                       <Icon name="edit" class="w-4 h-4" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
