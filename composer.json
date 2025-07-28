@@ -1,11 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/vue-starter-kit",
+    "name": "pip-and-profit/trading-platform",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A comprehensive online platform for teaching Forex & Volatility Trading.",
     "keywords": [
         "laravel",
-        "framework"
+        "trading",
+        "education",
+        "forex",
+        "courses"
     ],
     "license": "MIT",
     "require": {

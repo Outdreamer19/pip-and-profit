@@ -23,7 +23,7 @@
                     {{ course.title }}
                   </h3>
                   <p class="text-gray-600">
-                    {{ course.lessons.length }} lessons
+                    {{ course.lessons?.length || 0 }} lessons
                   </p>
                 </div>
                 <div class="text-2xl font-bold text-indigo-600">

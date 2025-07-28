@@ -112,7 +112,7 @@
                     />
                     <button
                       type="button"
-                      @click="() => videoInput.value?.click()"
+                      @click="triggerVideoInput"
                       class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
                     >
                       Choose Video File
@@ -182,7 +182,7 @@
                   />
                   <button
                     type="button"
-                    @click="() => ($refs.thumbnailInput as HTMLInputElement)?.click()"
+                    @click="triggerThumbnailInput"
                     class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
                   >
                     Choose Image
@@ -200,7 +200,7 @@
             <!-- Submit Buttons -->
             <div class="flex items-center justify-between pt-6 border-t border-gray-200">
               <Link
-                :href="route('admin.courses.edit', lesson.course_id)"
+                :href="route('admin.courses.edit', lesson.course.slug)"
                 class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"
               >
                 Back to Course
@@ -243,6 +243,11 @@ interface Lesson {
   thumbnail_url: string | null
   order: number
   is_free: boolean
+  course: {
+    id: number
+    slug: string
+    title: string
+  }
 }
 
 interface Props {
@@ -280,6 +285,18 @@ const handleThumbnailUpload = (event: Event) => {
   }
 }
 
+const triggerVideoInput = () => {
+  if (videoInput.value) {
+    videoInput.value.click()
+  }
+}
+
+const triggerThumbnailInput = () => {
+  if (thumbnailInput.value) {
+    thumbnailInput.value.click()
+  }
+}
+
 const uploadVideo = async () => {
   if (!videoFile.value) return
 
@@ -300,9 +317,20 @@ const uploadVideo = async () => {
       console.log('Video uploaded:', result)
       // Refresh the page to show the new video
       window.location.reload()
+    } else {
+      const contentType = response.headers.get('content-type')
+      if (contentType && contentType.includes('application/json')) {
+        const error = await response.json()
+        console.error('Error uploading video:', error)
+        alert(`Error uploading video: ${error.message || 'Unknown error'}`)
+      } else {
+        console.error('Error uploading video: Server returned non-JSON response')
+        alert('Error uploading video: Server returned an invalid response')
+      }
     }
   } catch (error) {
     console.error('Error uploading video:', error)
+    alert('Error uploading video: Network error')
   }
 }
 
@@ -326,9 +354,20 @@ const uploadThumbnail = async () => {
       console.log('Thumbnail uploaded:', result)
       // Refresh the page to show the new thumbnail
       window.location.reload()
+    } else {
+      const contentType = response.headers.get('content-type')
+      if (contentType && contentType.includes('application/json')) {
+        const error = await response.json()
+        console.error('Error uploading thumbnail:', error)
+        alert(`Error uploading thumbnail: ${error.message || 'Unknown error'}`)
+      } else {
+        console.error('Error uploading thumbnail: Server returned non-JSON response')
+        alert('Error uploading thumbnail: Server returned an invalid response')
+      }
     }
   } catch (error) {
     console.error('Error uploading thumbnail:', error)
+    alert('Error uploading thumbnail: Network error')
   }
 }
 
@@ -379,9 +418,20 @@ const formatFileSize = (bytes: number) => {
 }
 
 const submit = () => {
+  console.log('Lesson edit form submitted', {
+    lesson_id: props.lesson.id,
+    lesson_title: props.lesson.title,
+    form_data: form.data(),
+    route: route('admin.lessons.update', props.lesson.id),
+  })
+  
   form.put(route('admin.lessons.update', props.lesson.id), {
     onSuccess: () => {
+      console.log('Lesson update successful')
       // Redirect will be handled by the controller
+    },
+    onError: (errors) => {
+      console.error('Lesson update failed', errors)
     },
   })
 }

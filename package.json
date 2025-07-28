@@ -1,4 +1,5 @@
 {
+    "name": "pip-and-profit",
     "private": true,
     "type": "module",
     "engines": {

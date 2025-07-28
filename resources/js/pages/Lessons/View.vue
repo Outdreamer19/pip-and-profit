@@ -4,6 +4,26 @@
       <Heading :title="lesson.title" />
     </template>
 
+    <!-- Admin Course Content View Banner -->
+    <div v-if="$page.props.auth.user?.is_admin" class="bg-green-100 border-b border-green-200">
+      <div class="container mx-auto px-4 py-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <Icon name="book-open" class="w-4 h-4 text-green-600" />
+            <span class="text-sm font-medium text-green-800">
+              Admin Course Content View - You're viewing the course content as an admin
+            </span>
+          </div>
+          <TextLink
+            :href="route('admin.courses.edit', course.slug)"
+            class="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+          >
+            Back to Admin
+          </TextLink>
+        </div>
+      </div>
+    </div>
+
     <div class="container mx-auto px-4 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Video Player -->
@@ -112,6 +132,7 @@ import { router } from '@inertiajs/vue3'
 import AppLayout from '@/layouts/AppLayout.vue'
 import Heading from '@/components/Heading.vue'
 import Icon from '@/components/Icon.vue'
+import TextLink from '@/components/TextLink.vue'
 import VideoPlayer from '@/components/VideoPlayer.vue'
 
 interface Lesson {

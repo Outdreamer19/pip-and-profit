@@ -14,9 +14,9 @@
           <div class="aspect-video bg-gray-200">
             <img
               v-if="course.image"
-              :src="course.image"
+              :src="`/storage/course-images/${course.image}`"
               :alt="course.title"
-              class="w-full h-full object-cover"
+              class="w-full h-48 object-cover rounded-t-lg"
             />
             <div
               v-else

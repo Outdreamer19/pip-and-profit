@@ -4,6 +4,9 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    define: {
+        'import.meta.env.VITE_APP_NAME': JSON.stringify('Pip & Profit'),
+    },
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],

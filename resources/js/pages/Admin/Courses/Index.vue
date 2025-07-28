@@ -28,8 +28,14 @@
           class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
         >
           <!-- Course Image -->
-          <div class="h-48 bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-            <Icon name="video" class="w-16 h-16 text-indigo-600" />
+          <div class="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+            <img
+              v-if="course.image_url"
+              :src="course.image_url"
+              :alt="course.title"
+              class="w-full h-full object-cover"
+            />
+            <Icon v-else name="video" class="w-16 h-16 text-gray-400" />
           </div>
           
           <!-- Course Content -->
@@ -137,6 +143,8 @@ interface Course {
   price: number
   is_published: boolean
   lessons: Lesson[]
+  image: string | null
+  image_url: string | null
 }
 
 interface PaginatedCourses {

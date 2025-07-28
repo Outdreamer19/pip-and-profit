@@ -109,92 +109,31 @@ A comprehensive online platform for teaching Forex & Volatility Trading. Users c
    npm run dev
    ```
 
-## Default Users
+## Development
 
-After running the seeder, you'll have these default users:
-
-- **Admin**: admin@pipandprofit.com / password
-- **User**: test@example.com / password
-
-## Demo Data
-
-The application comes with demo courses:
-- Forex Trading Mastery ($299)
-- Volatility Trading Strategies ($199)
-- Advanced Trading Techniques ($399)
-
-Each course includes multiple lessons with video content.
-
-## Development URLs
-
-- **Development**: http://pip.test
-- **Production**: https://pipandprofit.com
-
-## Stripe Configuration
-
-1. Create a Stripe account at https://stripe.com
-2. Get your API keys from the Stripe Dashboard
-3. Add the keys to your `.env` file
-4. Configure webhooks for payment confirmation
-
-## File Structure
-
-```
-pip/
-├── app/
-│   ├── Http/Controllers/
-│   │   ├── AdminController.php
-│   │   ├── CourseController.php
-│   │   ├── OrderController.php
-│   │   └── LessonController.php
-│   └── Models/
-│       ├── Course.php
-│       ├── Lesson.php
-│       ├── Order.php
-│       └── User.php
-├── database/
-│   ├── migrations/
-│   └── seeders/
-├── resources/js/
-│   ├── pages/
-│   │   ├── Courses/
-│   │   ├── Admin/
-│   │   └── Checkout.vue
-│   └── components/
-└── routes/
-    └── web.php
+### Running Tests
+```bash
+php artisan test
 ```
 
-## API Endpoints
+### Code Formatting
+```bash
+npm run format
+```
 
-### Public Routes
-- `GET /` - Landing page
-- `GET /courses` - Course listing
-- `GET /courses/{course}` - Course details
-
-### Protected Routes
-- `GET /dashboard` - User dashboard
-- `GET /checkout/{course}` - Checkout page
-- `POST /checkout/{course}/process` - Process payment
-
-### Admin Routes
-- `GET /admin` - Admin dashboard
-- `GET /admin/courses` - Course management
-- `GET /admin/users` - User management
-- `GET /admin/orders` - Order management
+### Linting
+```bash
+npm run lint
+```
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
+4. Run tests and linting
 5. Submit a pull request
 
 ## License
 
-This project is licensed under the MIT License.
-
-## Support
-
-For support, email support@pipandprofit.com or create an issue in the repository. 
+This project is licensed under the MIT License. 

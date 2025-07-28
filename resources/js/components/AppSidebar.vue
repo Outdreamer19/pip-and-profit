@@ -5,7 +5,20 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Users, ShoppingCart, Settings, DollarSign, MessageCircle, Home } from 'lucide-vue-next';
+import { 
+    BookOpen, 
+    LayoutGrid, 
+    Settings, 
+    DollarSign, 
+    MessageCircle, 
+    Home, 
+    Plus, 
+    UserCheck, 
+    CreditCard,
+    TrendingUp,
+    Users,
+    BarChart3
+} from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const page = usePage();
@@ -18,14 +31,19 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Courses',
+        title: 'My Courses',
         href: '/courses',
         icon: BookOpen,
     },
     {
-        title: 'Pricing',
-        href: '/pricing',
-        icon: DollarSign,
+        title: 'Learning Progress',
+        href: '/progress',
+        icon: TrendingUp,
+    },
+    {
+        title: 'Community',
+        href: '/community',
+        icon: Users,
     },
 ];
 
@@ -42,14 +60,24 @@ const adminNavItems: NavItem[] = [
         icon: BookOpen,
     },
     {
+        title: 'Create Course',
+        href: '/admin/courses/create',
+        icon: Plus,
+    },
+    {
         title: 'User Management',
         href: '/admin/users',
-        icon: Users,
+        icon: UserCheck,
     },
     {
         title: 'Orders & Payments',
         href: '/admin/orders',
-        icon: ShoppingCart,
+        icon: CreditCard,
+    },
+    {
+        title: 'Analytics',
+        href: '/admin/analytics',
+        icon: BarChart3,
     },
 ];
 
@@ -84,15 +112,15 @@ const footerNavItems: NavItem[] = [
         icon: Settings,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: Folder,
+        title: 'Help & Support',
+        href: '/support',
+        icon: MessageCircle,
     },
 ];
 
 // Determine which navigation items to show based on user role
 const getNavItems = () => {
-    if (user?.role === 'admin') {
+    if (user && (user as any).is_admin) {
         return [...mainNavItems, ...adminNavItems];
     } else if (user) {
         return mainNavItems;
@@ -103,11 +131,11 @@ const getNavItems = () => {
 </script>
 
 <template>
-    <Sidebar collapsible="icon" variant="inset">
-        <SidebarHeader>
+    <Sidebar collapsible="icon" variant="inset" class="border-r border-gray-200 bg-white">
+        <SidebarHeader class="border-b border-gray-200 bg-gradient-to-r from-teal-50 to-blue-50">
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton size="lg" as-child>
+                    <SidebarMenuButton size="lg" as-child class="hover:bg-gradient-to-r hover:from-teal-100 hover:to-blue-100">
                         <Link :href="user ? route('dashboard') : route('home')">
                             <AppLogo />
                         </Link>
@@ -116,11 +144,11 @@ const getNavItems = () => {
             </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent>
+        <SidebarContent class="bg-white">
             <NavMain :items="getNavItems()" />
         </SidebarContent>
 
-        <SidebarFooter>
+        <SidebarFooter class="border-t border-gray-200 bg-gray-50">
             <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>

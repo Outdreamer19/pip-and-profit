@@ -4,6 +4,26 @@
       <Heading :title="course.title" />
     </template>
 
+    <!-- Admin Student View Banner -->
+    <div v-if="$page.props.auth.user?.is_admin && $page.props.studentView" class="bg-blue-100 border-b border-blue-200">
+      <div class="container mx-auto px-4 py-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <Icon name="eye" class="w-4 h-4 text-blue-600" />
+            <span class="text-sm font-medium text-blue-800">
+              Student View Mode - You're viewing this course as students would see it
+            </span>
+          </div>
+          <TextLink
+            :href="route('admin.courses.edit', course.slug)"
+            class="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+          >
+            Back to Admin
+          </TextLink>
+        </div>
+      </div>
+    </div>
+
     <div class="container mx-auto px-4 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Course Details -->
@@ -12,9 +32,9 @@
             <div class="aspect-video bg-gray-200">
               <img
                 v-if="course.image"
-                :src="course.image"
+                :src="`/storage/course-images/${course.image}`"
                 :alt="course.title"
-                class="w-full h-full object-cover"
+                class="w-full h-64 object-cover rounded-lg"
               />
               <div
                 v-else
@@ -46,20 +66,72 @@
               </div>
               
               <div class="flex space-x-4">
-                <TextLink
-                  v-if="$page.props.auth.user"
-                  :href="route('checkout', course.slug)"
-                  class="flex-1 text-center bg-indigo-600 text-white hover:bg-indigo-700 py-3 px-6 rounded-lg font-semibold"
-                >
-                  Enroll Now
-                </TextLink>
+                <!-- Admin Actions -->
+                <div v-if="$page.props.auth.user?.is_admin && !$page.props.studentView" class="flex space-x-4 w-full">
+                  <TextLink
+                    :href="route('admin.courses.edit', course.slug)"
+                    class="flex-1 text-center bg-blue-600 text-white hover:bg-blue-700 py-3 px-6 rounded-lg font-semibold"
+                  >
+                    Edit Course
+                  </TextLink>
+                  
+                  <TextLink
+                    v-if="course.lessons.length > 0"
+                    :href="route('lessons.show', { course: course.slug, lesson: course.lessons[0].id })"
+                    class="flex-1 text-center bg-green-600 text-white hover:bg-green-700 py-3 px-6 rounded-lg font-semibold"
+                  >
+                    View Course
+                  </TextLink>
+                  
+                  <TextLink
+                    :href="route('admin.courses.index')"
+                    class="flex-1 text-center border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-6 rounded-lg font-semibold"
+                  >
+                    All Courses
+                  </TextLink>
+                </div>
                 
-                <TextLink
-                  :href="route('courses.index')"
-                  class="flex-1 text-center border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-6 rounded-lg font-semibold"
-                >
-                  Back to Courses
-                </TextLink>
+                <!-- Student View for Admins -->
+                <div v-if="$page.props.auth.user?.is_admin && $page.props.studentView" class="flex space-x-4 w-full">
+                  <TextLink
+                    :href="route('admin.courses.edit', course.slug)"
+                    class="flex-1 text-center bg-blue-600 text-white hover:bg-blue-700 py-3 px-6 rounded-lg font-semibold"
+                  >
+                    Back to Admin
+                  </TextLink>
+                  
+                  <TextLink
+                    :href="route('checkout', course.slug)"
+                    class="flex-1 text-center bg-indigo-600 text-white hover:bg-indigo-700 py-3 px-6 rounded-lg font-semibold"
+                  >
+                    Enroll Now
+                  </TextLink>
+                  
+                  <TextLink
+                    :href="route('courses.index')"
+                    class="flex-1 text-center border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-6 rounded-lg font-semibold"
+                  >
+                    Back to Courses
+                  </TextLink>
+                </div>
+                
+                <!-- Student Actions -->
+                <div v-if="!$page.props.auth.user?.is_admin" class="flex space-x-4 w-full">
+                  <TextLink
+                    v-if="$page.props.auth.user"
+                    :href="route('checkout', course.slug)"
+                    class="flex-1 text-center bg-indigo-600 text-white hover:bg-indigo-700 py-3 px-6 rounded-lg font-semibold"
+                  >
+                    Enroll Now
+                  </TextLink>
+                  
+                  <TextLink
+                    :href="route('courses.index')"
+                    class="flex-1 text-center border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-6 rounded-lg font-semibold"
+                  >
+                    Back to Courses
+                  </TextLink>
+                </div>
               </div>
               
               <!-- Start Learning Button for enrolled users -->
@@ -103,13 +175,32 @@
                 </div>
                 
                 <div class="flex items-center space-x-2">
-                  <span
-                    v-if="lesson.is_free"
-                    class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full"
-                  >
-                    Free
-                  </span>
-                  <Icon name="lock" class="w-4 h-4 text-gray-400" />
+                  <!-- Admin Actions for Lessons -->
+                  <div v-if="$page.props.auth.user?.is_admin" class="flex items-center space-x-2">
+                    <TextLink
+                      :href="route('admin.lessons.edit', lesson.id)"
+                      class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hover:bg-blue-200"
+                    >
+                      Edit
+                    </TextLink>
+                    <span
+                      v-if="lesson.is_free"
+                      class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full"
+                    >
+                      Free
+                    </span>
+                  </div>
+                  
+                  <!-- Student View -->
+                  <div v-else class="flex items-center space-x-2">
+                    <span
+                      v-if="lesson.is_free"
+                      class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full"
+                    >
+                      Free
+                    </span>
+                    <Icon name="lock" class="w-4 h-4 text-gray-400" />
+                  </div>
                 </div>
               </div>
             </div>

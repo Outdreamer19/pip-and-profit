@@ -18,6 +18,8 @@ class OrderController extends Controller
 
     public function checkout(Course $course)
     {
+        $course->load('lessons');
+        
         return Inertia::render('Checkout', [
             'course' => $course,
             'stripeKey' => config('services.stripe.key'),

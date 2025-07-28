@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseVideoUploadController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\OrderController;
@@ -48,7 +49,15 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
     
+    // Course video upload routes
+    Route::post('/courses/{course}/upload-video', [CourseVideoUploadController::class, 'upload'])->name('courses.upload-video');
+    Route::post('/courses/{course}/upload-image', [CourseVideoUploadController::class, 'uploadImage'])->name('courses.upload-image');
+    Route::delete('/courses/{course}/delete-video', [CourseController::class, 'deleteVideo'])->name('courses.delete-video');
+    Route::delete('/courses/{course}/delete-image', [CourseController::class, 'deleteImage'])->name('courses.delete-image');
+    
     // Admin lesson management routes
+    Route::get('/courses/{course}/lessons/create', [LessonController::class, 'create'])->name('lessons.create');
+    Route::post('/courses/{course}/lessons', [LessonController::class, 'store'])->name('lessons.store');
     Route::get('/lessons/{lesson}/edit', [LessonController::class, 'edit'])->name('lessons.edit');
     Route::put('/lessons/{lesson}', [LessonController::class, 'update'])->name('lessons.update');
     
